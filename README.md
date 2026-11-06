@@ -14,7 +14,7 @@ Cost: Cloudflare Pages and Cloudflare Access have free tiers that cover one pers
 ## Try it in 30 seconds (no accounts)
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/latticer-time.git
+git clone https://github.com/Latticer-Git/latticer-time.git
 cd latticer-time
 npm run demo
 ```
