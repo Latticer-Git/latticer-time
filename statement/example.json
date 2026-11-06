@@ -1,0 +1,21 @@
+{
+  "draft": true,
+  "client": "Acme Coffee Roasters",
+  "engagement": "Website Content Retainer",
+  "periodLabel": "March 2026",
+  "periodRange": "March 1 to March 31, 2026",
+  "preparedDate": "April 2, 2026",
+  "preparedBy": "Your Company LLC",
+  "footerLine": "Your Company LLC  ·  hello@example.com",
+  "additionalRate": "$100 per hour",
+  "rounding": 15,
+  "monthlyCap": null,
+  "weeklyCap": 5,
+  "termIncluded": 60,
+  "hoursBeforePeriod": 0,
+  "entries": [
+    { "date": "2026-03-03", "work": "Kickoff call and content plan", "minutes": 70, "counted": 1.25 },
+    { "date": "2026-03-10", "work": "Draft and edit three product pages", "minutes": 170, "counted": 3.0 },
+    { "date": "2026-03-17", "work": "Weekly check-in call", "minutes": 38, "counted": 0.75 }
+  ]
+}

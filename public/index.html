@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Time Tracker</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+  <header>
+    <div class="brand"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2 22 12 12 22 2 12Z" fill="#5FD068"/></svg><span>Time</span></div>
+    <div id="sync" class="sync" title="Sync status">Loading…</div>
+  </header>
+
+  <section class="totals">
+    <div class="stat"><div class="label" id="lblClient">Client today</div><div class="big" id="totClient">0:00</div><div class="sub" id="subClient">0.00 h counted</div></div>
+    <div class="stat"><div class="label">All work today</div><div class="big" id="totAll">0:00</div><div class="sub" id="subAll">0.00 h counted</div></div>
+  </section>
+
+  <section class="card" id="timerCard">
+    <div class="grid">
+      <label>Client<select id="selClient"></select></label>
+      <label>Project<select id="selEng"></select></label>
+      <label>Deliverable<select id="selDel"></select></label>
+      <label>Type of work<select id="selTask"></select></label>
+    </div>
+    <label class="note">Note<input id="note" type="text" placeholder="What you are doing" maxlength="200" autocomplete="off"></label>
+    <div class="clock" id="clock">0:00:00</div>
+    <button id="go" class="go">Start</button>
+    <div id="msg" class="msg" role="status"></div>
+  </section>
+
+  <section class="card" id="budget" hidden></section>
+
+  <section class="card">
+    <div class="row"><h2>Today</h2><button id="toggleManual" class="link">Add time manually</button></div>
+    <form id="manual" hidden>
+      <div class="grid">
+        <label>Start<input type="datetime-local" id="mStart" required></label>
+        <label>End<input type="datetime-local" id="mEnd" required></label>
+      </div>
+      <button class="ghost" type="submit">Add entry</button>
+      <span class="hint">Uses the client, project, deliverable and type selected above.</span>
+    </form>
+    <ul id="list" class="list"></ul>
+  </section>
+</main>
+<script src="/config.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

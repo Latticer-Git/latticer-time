@@ -1,0 +1,8 @@
+{
+  "name": "latticer-time-statement",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monthly hours statement generator for Latticer Time",
+  "scripts": { "example": "node make_statement.js example.json example-statement.docx" },
+  "dependencies": { "docx": "^9.0.0" }
+}

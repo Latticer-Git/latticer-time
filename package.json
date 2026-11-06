@@ -1,0 +1,13 @@
+{
+  "name": "latticer-time",
+  "version": "1.0.0",
+  "description": "A small, self-hosted time tracker: a phone-friendly timer on top of your own Airtable base, deployed to Cloudflare Pages.",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "demo": "node dev-server.js",
+    "deploy": "wrangler pages deploy public --project-name latticer-time --branch main"
+  },
+  "keywords": ["time-tracking", "airtable", "cloudflare-pages", "pwa", "freelance"],
+  "engines": { "node": ">=18" }
+}

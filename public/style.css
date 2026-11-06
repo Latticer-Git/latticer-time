@@ -1,0 +1,52 @@
+:root{--bg:#0B0E14;--card:#0F1B2E;--line:#1C2940;--green:#5FD068;--text:#F2F3F5;--muted:#8A93A3;--red:#FF6B6B;--amber:#F5B84B;
+--font:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;--disp:"Space Grotesk",var(--font)}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 var(--font);-webkit-font-smoothing:antialiased}
+main{max-width:640px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;padding:4px 0 14px}
+.brand{display:flex;align-items:center;gap:8px;font:700 16px var(--disp)}
+.sync{font:11px var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.sync.ok::before,.sync.warn::before,.sync.err::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--green)}
+.sync.warn::before{background:var(--amber)}.sync.err::before{background:var(--red)}
+.totals{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.stat,.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card{margin-bottom:12px}
+.label{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.big{font:700 30px var(--mono);color:var(--green);margin-top:4px}
+.sub{font:12px var(--mono);color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.grid{grid-template-columns:1fr}.big{font-size:26px}}
+label{display:block;font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+select,input{width:100%;margin-top:6px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:11px 10px;font:15px var(--font);letter-spacing:0;text-transform:none}
+select:focus,input:focus{outline:2px solid var(--green);outline-offset:1px}
+select:disabled,input:disabled{opacity:.6}
+.note{margin-top:12px}
+.clock{font:700 44px var(--mono);text-align:center;margin:18px 0 12px;letter-spacing:.02em}
+.go{width:100%;background:var(--green);color:#0B0E14;border:0;border-radius:10px;padding:16px;font:700 17px var(--disp);cursor:pointer}
+.go.stop{background:var(--red)}
+.go:disabled{opacity:.5;cursor:not-allowed}
+.msg{min-height:20px;margin-top:10px;font-size:13px;color:var(--muted);text-align:center}
+.msg.err{color:var(--red)}
+.row{display:flex;align-items:center;justify-content:space-between}
+h2{margin:0;font:700 17px var(--disp)}
+.link{background:none;border:0;color:var(--green);font:13px var(--font);cursor:pointer;padding:4px}
+.ghost{background:none;border:1px solid var(--green);color:var(--green);border-radius:8px;padding:9px 14px;font:600 14px var(--font);cursor:pointer;margin-top:12px}
+.hint{font-size:12px;color:var(--muted);margin-left:8px}
+#manual{margin:12px 0 4px}
+.list{list-style:none;margin:10px 0 0;padding:0}
+.list li{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.list li:first-child{border-top:0}
+.list .t{font-weight:600}.list .s{font-size:12px;color:var(--muted)}
+.list .d{font:13px var(--mono);text-align:right}
+.list .d small{display:block;color:var(--muted);font-size:11px}
+.x{background:none;border:0;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:6px}
+.x:hover{color:var(--red)}
+.empty{color:var(--muted);padding:10px 0}
+.bar{height:8px;border-radius:6px;background:var(--bg);overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--green)}
+.bar.warn i{background:var(--amber)}.bar.full i{background:var(--red)}
+.kv{display:flex;justify-content:space-between;font:13px var(--mono);color:var(--muted);margin-top:4px}
+.kv b{color:var(--text);font-weight:600}
+.flag{margin-top:10px;padding:8px 10px;border-radius:8px;background:rgba(245,184,75,.12);color:var(--amber);font-size:13px}
+.flag.full{background:rgba(255,107,107,.12);color:var(--red)}
