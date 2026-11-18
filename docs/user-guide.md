@@ -20,6 +20,8 @@ This guide covers daily use. To build your own copy first, see the [setup guide]
 
 ## Log time with the timer
 
+![The timer card ready to start: a client, project, deliverable and type of work chosen, a note typed, and the green Start button.](images/timer-start.png)
+
 ![The timer card while a timer runs on an internal project: client, project, deliverable, type of work, For customer, note, the clock, and Pause and Stop buttons.](images/timer-running.png)
 
 1. Choose the **client**, then the **project**. The project list only shows that client's projects.
