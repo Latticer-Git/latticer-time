@@ -35,7 +35,7 @@ Commercial trackers can count hours, but this practice already had the rest of t
 
 - Airtable answers create and update calls with field *names* but reads can be keyed by field *ID*, which made the app briefly show blank fields after stopping a timer. The open-source version moved to field names everywhere, which is also simpler for anyone building their own base.
 - The first release of the optional customer picker shipped with a visual bug: a stylesheet rule overrode the HTML `hidden` attribute, so the picker appeared on client projects where it should not. Testing the next feature caught it. The fix is one line, and the lesson is to check hidden elements in a real browser, not only in code.
-- The first deployment accidentally published files that were never meant to be public because the whole folder was uploaded instead of the web folder. The rule that came out of it, "deploy only `public/`", is now in the docs.
+- An early deployment included more than it needed to. The fix was a rule, now in the docs: deploy only `public/`.
 
 ## What it is not
 
