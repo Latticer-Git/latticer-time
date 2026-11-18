@@ -18,7 +18,9 @@ const TK = { name: 'Name', parent: 'Parent', applies: 'Applies To', active: 'Act
 const TE = {
   uuid: 'Entry UUID', phase: 'Phase', start: 'Start', end: 'End', date: 'Work Date', status: 'Status',
   source: 'Source', worker: 'Worker', note: 'Note', eng: 'Engagement', del: 'Deliverable', task: 'Task Type',
+  pausedAt: 'Paused At', pausedSec: 'Paused Seconds', related: CFG.relatedClientField || '',
 };
+const PAUSE = CFG.enablePause !== false;
 const DEFAULT_INC = CFG.defaultIncrement || 15;
 const $ = (id) => document.getElementById(id);
 const pad = (n) => String(n).padStart(2, '0');
@@ -76,16 +78,22 @@ const f = (rec, id) => (rec.fields ? rec.fields[id] : undefined);
 const engById = (id) => S.eng.find((e) => e.id === id);
 const taskById = (id) => S.tasks.find((t) => t.id === id);
 const incOf = (engId) => { const e = engById(engId); const v = e && f(e, EN.inc); return v || DEFAULT_INC; };
+// Seconds spent paused: closed pauses (Paused Seconds) plus the pause in progress, if any.
+function pausedSecOf(entry, nowMs = Date.now()) {
+  const at = f(entry, TE.pausedAt);
+  return (f(entry, TE.pausedSec) || 0) + (at && !f(entry, TE.end) ? Math.max(0, (nowMs - Date.parse(at)) / 1000) : 0);
+}
 function minutesOf(entry, nowMs = Date.now()) {
   const s = Date.parse(f(entry, TE.start));
   const e = f(entry, TE.end) ? Date.parse(f(entry, TE.end)) : nowMs;
-  return Math.max(0, Math.round((e - s) / 60000));
+  return Math.max(0, Math.round((e - s - pausedSecOf(entry, nowMs) * 1000) / 60000));
 }
 function countedOf(entry, nowMs) {
   const eid = (f(entry, TE.eng) || [])[0];
   const inc = incOf(eid);
   const m = minutesOf(entry, nowMs);
-  return (Math.ceil(m / inc) * inc) / 60;
+  const steps = CFG.rounding === 'up' ? Math.ceil(m / inc) : Math.round(m / inc);
+  return (steps * inc) / 60;
 }
 const phaseFor = (eng) => {
   if (f(eng, EN.type) === 'Internal') return 'Internal';
@@ -153,15 +161,17 @@ function setSync(kind, text) { const s = $('sync'); s.className = 'sync ' + kind
 
 function currentSelection() {
   const eng = engById($('selEng').value);
-  return { eng, del: $('selDel').value, task: $('selTask').value };
+  const internal = eng && f(eng, EN.type) === 'Internal';
+  return { eng, del: $('selDel').value, task: $('selTask').value, rel: internal && TE.related ? $('selRel').value : '' };
 }
-function entryFields({ eng, del, task }, start, end, source, status, id) {
+function entryFields({ eng, del, task, rel }, start, end, source, status, id) {
   const fields = {
     [TE.eng]: [eng.id], [TE.task]: [task], [TE.phase]: phaseFor(eng), [TE.start]: start.toISOString(),
     [TE.date]: ymd(start), [TE.status]: status, [TE.source]: source, [TE.uuid]: id,
   };
   if (CFG.workerName) fields[TE.worker] = CFG.workerName;
   if (del) fields[TE.del] = [del];
+  if (rel && TE.related) fields[TE.related] = [rel];
   if (end) fields[TE.end] = end.toISOString();
   const note = $('note').value.trim();
   if (note) fields[TE.note] = note;
@@ -199,6 +209,8 @@ async function stop() {
   $('go').disabled = true;
   const end = new Date();
   const fields = { [TE.end]: end.toISOString(), [TE.status]: 'Complete' };
+  // Stopping while paused: close the open pause so it is not counted as work
+  if (PAUSE && f(run, TE.pausedAt)) { fields[TE.pausedSec] = Math.round(pausedSecOf(run, end.getTime())); fields[TE.pausedAt] = null; }
   const note = $('note').value.trim();
   if (note) fields[TE.note] = note;
   try {
@@ -215,6 +227,30 @@ async function stop() {
   const eid = (f(run, TE.eng) || [])[0];
   refreshEngagement(eid).then(render).catch(() => {});
   $('go').disabled = false;
+  render();
+}
+// Pause and resume edit the running entry in place, so the note and selections stay put.
+async function togglePause() {
+  const run = S.running;
+  if (!run) return;
+  const now = new Date();
+  const fields = f(run, TE.pausedAt)
+    ? { [TE.pausedSec]: Math.round(pausedSecOf(run, now.getTime())), [TE.pausedAt]: null }
+    : { [TE.pausedAt]: now.toISOString() };
+  const note = $('note').value.trim();
+  if (note) fields[TE.note] = note;
+  $('pause').disabled = true;
+  try {
+    if (run.id.startsWith('local')) throw Object.assign(new Error('offline'), { status: 0 });
+    await api('PATCH', `${T.te}/${run.id}`, { fields });
+  } catch (e) {
+    if (e.status && e.status < 500) { msg('Could not pause: ' + (e.detail?.error?.message || e.message), true); $('pause').disabled = false; return; }
+    queue.push({ op: 'patch', uuid: f(run, TE.uuid), fields }); saveQueue();
+    S.online = false;
+  }
+  Object.assign(run.fields, fields);
+  saveLocal(); msg('');
+  $('pause').disabled = false;
   render();
 }
 async function addManual(ev) {
@@ -278,7 +314,16 @@ function renderSelects() {
   });
   $('selTask').innerHTML = html;
   if (!S.tasks.some((t) => t.id === S.sel.task)) S.sel.task = '';
-  ['selClient', 'selEng', 'selDel', 'selTask'].forEach((id) => { $(id).disabled = !!running; });
+  // Optional "for customer" tag on internal projects (enable with relatedClientField in config.js)
+  $('relWrap').hidden = !(internal && TE.related);
+  if (TE.related) {
+    if (running && internal) S.sel.rel = (f(running, TE.related) || [])[0] || '';
+    const own = eng && (f(eng, EN.client) || [])[0];
+    const custs = S.clients.filter((c) => c.id !== own);
+    if (!custs.some((c) => c.id === S.sel.rel)) S.sel.rel = '';
+    fillSelect($('selRel'), custs.map((c) => ({ id: c.id, label: f(c, CL.name) })), S.sel.rel, 'None');
+  }
+  ['selClient', 'selEng', 'selDel', 'selTask', 'selRel'].forEach((id) => { $(id).disabled = !!running; });
   localStorage.setItem('sel', JSON.stringify(S.sel));
 }
 function renderTotals() {
@@ -297,7 +342,11 @@ function renderTotals() {
 }
 function renderClock() {
   const run = S.running;
-  $('clock').textContent = run ? hms((Date.now() - Date.parse(f(run, TE.start))) / 1000) : '0:00:00';
+  const paused = !!(PAUSE && run && f(run, TE.pausedAt));
+  $('clock').textContent = run ? hms(Math.max(0, (Date.now() - Date.parse(f(run, TE.start))) / 1000 - pausedSecOf(run))) : '0:00:00';
+  $('clock').classList.toggle('paused', paused);
+  $('pause').hidden = !(PAUSE && run);
+  $('pause').textContent = paused ? 'Resume' : 'Pause';
   const go = $('go');
   go.textContent = run ? 'Stop' : 'Start';
   go.className = 'go' + (run ? ' stop' : '');
@@ -332,7 +381,7 @@ function renderList() {
     const pending = e.id.startsWith('local') ? ' · not synced' : '';
     return `<li><div><div class="t">${esc(task ? f(task, TK.name) : 'Work')}</div>
       <div class="s">${esc(eng ? f(eng, EN.name) : '')}${f(e, TE.note) ? ' · ' + esc(f(e, TE.note)) : ''}</div>
-      <div class="s">${clock(f(e, TE.start))} – ${running ? 'now' : clock(f(e, TE.end))}${pending}</div></div>
+      <div class="s">${clock(f(e, TE.start))} – ${running ? (f(e, TE.pausedAt) ? 'paused' : 'now') : clock(f(e, TE.end))}${pending}</div></div>
       <div class="d">${hm(m)}<small>${dec(countedOf(e, now))} h</small></div>
       <button class="x" data-del="${esc(e.id)}" aria-label="Delete entry" ${running ? 'disabled hidden' : ''}>×</button></li>`;
   }).join('') : '<li class="empty">Nothing logged yet today.</li>';
@@ -346,6 +395,8 @@ function renderSyncState() {
 // ---------- boot ----------
 function wire() {
   $('go').addEventListener('click', () => (S.running ? stop() : start()));
+  $('pause').addEventListener('click', togglePause);
+  $('selRel').addEventListener('change', (e) => { S.sel.rel = e.target.value; localStorage.setItem('sel', JSON.stringify(S.sel)); });
   $('selClient').addEventListener('change', (e) => { S.sel.client = e.target.value; S.sel.eng = ''; render(); });
   $('selEng').addEventListener('change', (e) => { S.sel.eng = e.target.value; render(); });
   $('selDel').addEventListener('change', (e) => { S.sel.del = e.target.value; localStorage.setItem('sel', JSON.stringify(S.sel)); });

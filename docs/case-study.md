@@ -1,6 +1,11 @@
+---
+title: Case study: a time tracker built around one sentence
+description: Why Latticer Time exists, the decisions that shaped it, and what went wrong along the way.
+---
+
 # Case study: a time tracker built around one sentence
 
-*Enterprise Latticer LLC, November 2026*
+*Enterprise Latticer LLC, November 2026. Updated for version 1.1.0.*
 
 ## The problem
 
@@ -20,11 +25,16 @@ Commercial trackers can count hours, but this practice already had the rest of t
 
 **Phone first, offline tolerant.** The timer has to be usable from a phone. The running timer lives in Airtable (a row with status `Running`), so it survives a reload, and writes made while offline go into a queue keyed by a UUID so reconnecting never creates duplicates.
 
+**Internal work is tracked the same way as client work.** A practice that sells time also spends time on sales, marketing, partnerships and building its own tools. Those hours went into the same tables under an internal client, so one report answers where the week went, and no second set of rules exists. A later optional field tags unbilled work to the customer it was done for, so a customer's real cost in effort is visible without touching their retainer hours. See [why it works this way](why-it-works-this-way.md).
+
+**Pause adjusts one entry instead of splitting it.** Version 1.1 added a Pause button after a real need: stepping away mid-task without ending the session and retyping the note. Splitting the entry would have multiplied rounding, so a pause is stored on the entry and subtracted by a formula. One task stays one line on a statement.
+
 **Clients get a statement, not a login.** A live client dashboard is a promise to keep it current and a surface to secure. A monthly one-page statement is a deliverable: reviewed by a human, sent on a schedule, with descriptions written for the client. A small script generates it.
 
 ## What went wrong, and what it taught
 
 - Airtable answers create and update calls with field *names* but reads can be keyed by field *ID*, which made the app briefly show blank fields after stopping a timer. The open-source version moved to field names everywhere, which is also simpler for anyone building their own base.
+- The first release of the optional customer picker shipped with a visual bug: a stylesheet rule overrode the HTML `hidden` attribute, so the picker appeared on client projects where it should not. Testing the next feature caught it. The fix is one line, and the lesson is to check hidden elements in a real browser, not only in code.
 - The first deployment accidentally published files that were never meant to be public because the whole folder was uploaded instead of the web folder. The rule that came out of it, "deploy only `public/`", is now in the docs.
 
 ## What it is not

@@ -1,3 +1,8 @@
+---
+title: Setup guide
+description: Build your own copy: the Airtable base, a scoped token, Cloudflare Pages, Cloudflare Access, your phone and a first test entry.
+---
+
 # Setup guide
 
 About 30 to 45 minutes the first time. You will need an [Airtable](https://airtable.com) account, a [Cloudflare](https://dash.cloudflare.com) account, Node.js 18 or newer, and a copy of this repository.

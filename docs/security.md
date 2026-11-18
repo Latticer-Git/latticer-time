@@ -1,3 +1,8 @@
+---
+title: Security notes
+description: What protects your data, what the proxy function allows, and what to double-check.
+---
+
 # Security notes
 
 Time data about clients is sensitive. This is how the design protects it, and what you must still do yourself.

@@ -1,11 +1,15 @@
 # Latticer Time
 
-A small, self-hosted time tracker for freelancers and consultants. Pick a client, project and type of work, press **Start**, press **Stop**. Your hours land in **your own Airtable base**, and the app tells you when a retainer's included hours are running out.
+A small, self-hosted time tracker for **solo consultants and freelancers who sell retainers**. Pick a client, project and type of work, press **Start**, press **Stop** (or **Pause** for a walk or a meal). Your hours land in **your own Airtable base**, and the app tells you when a retainer's included hours are running out.
 
-- **No build step.** Plain HTML, CSS and JavaScript, about 400 lines of app code.
+Not sure it is for you? Read [who it is for](docs/who-its-for.md) and [why it works this way](docs/why-it-works-this-way.md).
+
+- **No build step.** Plain HTML, CSS and JavaScript, about 450 lines of app code.
 - **Your data stays yours.** Airtable holds everything. The app is only the front end.
 - **Works on your phone.** Installable web app (add to home screen) with a timer that survives reloads and an offline queue that syncs when you reconnect.
-- **Retainer-aware.** Per-engagement rounding (for example up to 15 minutes), included hours, weekly and monthly caps, and warnings at 75%, 90% and 100%.
+- **Retainer-aware.** Per-engagement rounding (for example nearest 15 minutes), included hours, weekly and monthly caps, and warnings at 75%, 90% and 100%.
+- **Pause and resume.** Step away mid-task without ending the entry or retyping your note. Paused time is not counted.
+- **Internal work, same structure.** Track sales, marketing and tool-building like client work, and optionally tag it to the customer it was for.
 - **Locked down.** Cloudflare Access sign-in in front, and a proxy function that keeps the Airtable token out of the browser and can only write to one table.
 - **Monthly statements.** An optional script turns a month of entries into a one-page Word statement for your client.
 
@@ -46,15 +50,21 @@ Then make it yours: [docs/customizing.md](docs/customizing.md).
 | `functions/api/[[path]].js` | Cloudflare Pages Function: the narrow proxy to Airtable. |
 | `dev-server.js` | Demo server with fake Airtable data (`npm run demo`). |
 | `statement/` | Optional monthly hours statement generator (Word). |
-| `docs/` | Setup, schema, customizing, security, and a case study. |
+| `docs/` | Guides, schema reference, rationale, changelogs, and a case study. |
 
 ## Documentation
 
+Start at the [documentation home](docs/index.md), or jump in:
+
+- [Who it is for](docs/who-its-for.md): the person this is built for, and who should use something else
 - [Setup guide](docs/setup.md): from zero to a deployed app on your phone
+- [User guide](docs/user-guide.md): daily use, including pause, manual entries, offline and internal work
+- [Why it works this way](docs/why-it-works-this-way.md): the reasoning behind the schema and features
 - [Airtable schema](docs/airtable-schema.md): every table, field and formula
 - [Customizing](docs/customizing.md): config, rounding rules, branding, statements
 - [Security notes](docs/security.md): what protects your data and what to double-check
 - [Troubleshooting](docs/troubleshooting.md)
+- [Changelog](docs/changelog.md) and [schema changelog](docs/schema-changelog.md): what changed and how to upgrade
 - [Case study](docs/case-study.md): why it exists and the design decisions behind it
 
 ## Scope and limits

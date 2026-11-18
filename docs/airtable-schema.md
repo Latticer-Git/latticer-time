@@ -1,6 +1,13 @@
+---
+title: Airtable schema
+description: Every table, field and formula the timer needs, with copy-paste formulas and a short reason for each part.
+---
+
 # Airtable schema
 
 Create one base with five tables. **Names are exact and case-sensitive**: the app finds tables and fields by name (they are listed in `public/config.js`). If you rename something, change it there too.
+
+New here? Read [Why it works this way](why-it-works-this-way.md) first: it explains the reasons behind this layout. Recent changes are in the [schema changelog](schema-changelog.md).
 
 Only the fields marked *required* are needed for the timer to work. The budget fields are optional; the budget panel hides itself when an engagement has no hour limits set.
 
@@ -17,7 +24,7 @@ Clients ◄── Engagements ◄── Deliverables
 | Name | Single line text | *Required.* Primary field. |
 | Status | Single select | *Required.* Options: `Active`, `Prospect`, `Archived`. Only statuses in `clientStatuses` (config) show in the picker. |
 
-Add one client for your own business, for example "My Company (Internal)", to track internal work.
+Add one client for your own business, for example "My Company (Internal)", to track internal work. *Why:* internal time uses the same structure as client time, so one report covers everything. See [Why internal work uses the same structure](why-it-works-this-way.md#why-internal-work-uses-the-same-structure).
 
 ## Engagements
 
@@ -29,7 +36,7 @@ One row per project or agreement.
 | Client | Link to Clients | *Required.* Allow one record. |
 | Type | Single select | *Required.* Options: `Client`, `Internal`. Controls which task types appear. |
 | Stage | Single select | Optional. Free-form stages of your choosing; see `phaseByStage` and `hiddenStages` in config. |
-| Rounding Increment | Number (integer) | Minutes to round each entry **up** to. `15` for client work, `1` for exact. Blank means `defaultIncrement`. |
+| Rounding Increment | Number (integer) | Minutes each entry is rounded to (nearest by default; see `rounding` in config). `15` for client work, `1` for exact. Blank means `defaultIncrement`. |
 | Included Hours | Number | Optional. Total hours in the agreement. |
 | Weekly Cap | Number | Optional. |
 | Monthly Cap | Number | Optional. |
@@ -60,7 +67,7 @@ IF(AND({Weekly Cap}, {Hours This Week} >= {Weekly Cap}), "Weekly cap reached", I
 
 ## Deliverables
 
-Optional pieces of work inside an engagement (a lesson, a page, a report).
+Optional pieces of work inside an engagement (a lesson, a page, a report). For internal projects, add *standing* deliverables: reusable outputs such as "LinkedIn post", "Proposal or SOW" or "Addendum or amendment", so you can see what each kind of output costs in time. See [why](why-it-works-this-way.md#why-deliverables-exist-for-internal-work-too).
 
 | Field | Type | Notes |
 | --- | --- | --- |
@@ -100,16 +107,33 @@ One row per timer run or manual entry.
 | Source | Single select | `Timer` or `Manual`. Created on first use. |
 | Worker | Single line text or single select | Optional. Filled from `workerName` in config. |
 | Note | Single line text | Optional. |
+| Paused At | Date with time | Optional; needed for the Pause button. Set while a running entry is paused, blank otherwise. Same time zone setting as `Start`. |
+| Paused Seconds | Number (integer) | Optional; needed for the Pause button. Total seconds paused on this entry. Blank counts as zero. |
+| Related Client | Link to Clients | Optional. Tags unbilled internal work with the customer it was for. Set the field's name in `relatedClientField` in config to turn the picker on. |
 | Minutes | Formula | See below. |
 | Rounding Increment | Lookup | Lookup of `Rounding Increment` through `Engagement`. |
 | Counted Hours | Formula | See below. |
 
-**Minutes**
+### Minutes
+
+End minus start, minus any paused time. *Why:* pause adjusts one entry instead of splitting it, so rounding happens once. See [why](why-it-works-this-way.md#why-pause-adjusts-one-entry-instead-of-splitting-it).
+
 ```
-IF(AND({Start}, {End}), DATETIME_DIFF({End}, {Start}, 'minutes'), BLANK())
+IF(AND({Start}, {End}), DATETIME_DIFF({End}, {Start}, 'minutes') - IF({Paused Seconds}, ROUND({Paused Seconds} / 60, 0), 0), BLANK())
 ```
 
-**Counted Hours** (minutes rounded up to the engagement's increment, as hours; set the field's number precision to 2 decimals)
+If you do not use pause, the original formula still works: `IF(AND({Start}, {End}), DATETIME_DIFF({End}, {Start}, 'minutes'), BLANK())`.
+
+### Counted Hours
+
+Minutes rounded to the engagement's increment, as hours. Set the field's number precision to 2 decimals. *Why:* the rule is applied by a formula, after the fact, so you can change it without losing the exact times. See [why](why-it-works-this-way.md#why-rounding-is-per-entry-and-per-project).
+
+**Nearest increment** (default; `rounding: 'nearest'`; 7 minutes counts as 0, 8 as 15):
+```
+IF({Minutes}, ROUND(ROUND({Minutes} / IF(ARRAYJOIN({Rounding Increment}, ""), VALUE(ARRAYJOIN({Rounding Increment}, "")), 15)) * IF(ARRAYJOIN({Rounding Increment}, ""), VALUE(ARRAYJOIN({Rounding Increment}, "")), 15) / 60, 2), 0)
+```
+
+**Always up** (`rounding: 'up'`):
 ```
 IF({Minutes}, ROUND(CEILING({Minutes} / IF(ARRAYJOIN({Rounding Increment}, ""), VALUE(ARRAYJOIN({Rounding Increment}, "")), 15)) * IF(ARRAYJOIN({Rounding Increment}, ""), VALUE(ARRAYJOIN({Rounding Increment}, "")), 15) / 60, 2), 0)
 ```
@@ -123,6 +147,6 @@ Fields the app ignores, handy in Airtable itself: a `Billable` single select (Bi
 ## Rules baked into the app
 
 - Entries under one minute count as zero.
-- Rounding is per entry, always upward, set per engagement.
+- Rounding is per entry, to the nearest increment by default (or always up with `rounding: 'up'`), set per engagement.
 - The app sends `typecast: true` so Airtable creates missing single-select options. If you would rather lock the option lists, remove it in `api()` in `public/app.js` and create the options by hand.
 - The budget panel shows server values and refreshes when you stop the timer.

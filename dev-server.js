@@ -42,9 +42,9 @@ function recompute() {
     const used = db[TE]
       .filter((e) => (e.fields.Engagement || [])[0] === eng.id && e.fields.End)
       .reduce((a, e) => {
-        const m = Math.round((Date.parse(e.fields.End) - Date.parse(e.fields.Start)) / 60000);
+        const m = Math.round((Date.parse(e.fields.End) - Date.parse(e.fields.Start) - (e.fields['Paused Seconds'] || 0) * 1000) / 60000);
         const i = inc(eng.id);
-        return a + (Math.ceil(m / i) * i) / 60;
+        return a + (Math.round(m / i) * i) / 60;
       }, 0);
     const f = eng.fields;
     f['Hours Used'] = used; f['Hours This Week'] = used; f['Hours This Month'] = used;

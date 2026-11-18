@@ -27,10 +27,11 @@
       <label>Project<select id="selEng"></select></label>
       <label>Deliverable<select id="selDel"></select></label>
       <label>Type of work<select id="selTask"></select></label>
+      <label id="relWrap" hidden>For customer (optional)<select id="selRel"></select></label>
     </div>
     <label class="note">Note<input id="note" type="text" placeholder="What you are doing" maxlength="200" autocomplete="off"></label>
     <div class="clock" id="clock">0:00:00</div>
-    <button id="go" class="go">Start</button>
+    <div class="actions"><button id="pause" class="pause" type="button" hidden>Pause</button><button id="go" class="go">Start</button></div>
     <div id="msg" class="msg" role="status"></div>
   </section>
 

@@ -1,3 +1,8 @@
+---
+title: Customizing
+description: Change settings, rounding rules, branding, fields and statements.
+---
+
 # Customizing
 
 ## `public/config.js`
@@ -7,6 +12,9 @@
 | `tables` | Names of your five Airtable tables. Keep in sync with `functions/api/[[path]].js`. |
 | `workerName` | Written to each entry's `Worker` field. `''` skips it. |
 | `defaultIncrement` | Rounding minutes when an engagement has none. |
+| `rounding` | `'nearest'` (default) or `'up'`. Must match your `Counted Hours` formula. |
+| `enablePause` | `true` shows the Pause button. Needs the `Paused At` and `Paused Seconds` fields. |
+| `relatedClientField` | Name of a link-to-Clients field on Time Entries, for example `'Related Client'`. When set, internal projects show a **For customer** picker. `''` turns it off. |
 | `phaseByStage` | Map an engagement Stage to a Phase, for example `{ 'Lead': 'Sales' }`. `Internal` engagements always get `Internal`. |
 | `defaultPhase` | Phase for everything else. |
 | `clientStatuses` | Client statuses shown in the picker. |
@@ -16,7 +24,7 @@ Field names are defined at the top of `public/app.js` (the `CL`, `EN`, `DL`, `TK
 
 ## Rounding and hour rules
 
-- Rounding is per entry, up to the engagement's `Rounding Increment`. Client work at 15 and internal at 1 is a common split.
+- Rounding is per entry, to the engagement's `Rounding Increment` (nearest by default; `rounding: 'up'` for always up). Client work at 15 and internal at 1 is a common split. Reasons: [Why rounding is per entry and per project](why-it-works-this-way.md#why-rounding-is-per-entry-and-per-project).
 - The same rule exists twice: in `countedOf()` in `app.js` (on-screen totals) and in the `Counted Hours` formula in Airtable (rollups and flags). Change both together.
 - Caps and flags are Airtable formulas. Change the thresholds (`0.75`, `0.9`, `0.8`) in the formulas, not in the app.
 
