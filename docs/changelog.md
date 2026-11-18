@@ -7,6 +7,17 @@ description: "Feature releases of Latticer Time, newest first, with upgrade note
 
 Feature releases, newest first. Airtable table and field changes are listed separately in the [schema changelog](schema-changelog.md). Versions follow the `version` in `package.json`.
 
+## 1.1.1: 2026-11-17
+
+### Added
+
+- Screenshots in the [user guide](user-guide.md) and the README, made from the demo data.
+- The demo now includes internal projects (Sales and outreach, Marketing), standing deliverables, an "Amendment or addendum" task type, and the **For customer** picker, so you can try every feature without setting anything up. The demo turns the picker on itself; your `config.js` default stays off.
+
+### Changed
+
+- Version bumped to 1.1.1. No app or schema changes.
+
 ## 1.1.0: 2026-11-17
 
 ### Added

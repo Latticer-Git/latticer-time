@@ -20,6 +20,8 @@ This guide covers daily use. To build your own copy first, see the [setup guide]
 
 ## Log time with the timer
 
+![The timer card while a timer runs on an internal project: client, project, deliverable, type of work, For customer, note, the clock, and Pause and Stop buttons.](images/timer-running.png)
+
 1. Choose the **client**, then the **project**. The project list only shows that client's projects.
 2. Choose a **deliverable** if the work belongs to one (optional), and the **type of work** (required).
 3. Add a short **note** if you like.
@@ -35,6 +37,8 @@ Use **Pause** when you step away mid-task, such as a walk or a meal, and you wan
 1. With a timer running, press **Pause**. The clock freezes and turns amber. The button changes to **Resume**.
 2. When you are back, press **Resume**. The clock continues from where it stopped.
 3. If you press **Stop** while paused, the paused stretch is not counted. The entry ends at the time you stop, minus every pause.
+
+![The same timer paused: the clock is amber and the Pause button now reads Resume.](images/timer-paused.png)
 
 What stays the same across a pause: the project, deliverable, type of work and your note. You do not retype anything.
 
@@ -83,6 +87,8 @@ If the selected project has included hours or caps, the panel shows:
 - **Flags:** a warning at 75%, 90% and 100% of included hours, and near and reached for caps.
 
 The panel shows Airtable's numbers and refreshes when you stop the timer, not while it runs.
+
+![The hours budget panel (used, this week, this month) above the Today list of entries.](images/budget-and-today.png)
 
 ## How hours are counted
 

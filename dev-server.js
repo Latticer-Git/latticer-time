@@ -18,10 +18,16 @@ const db = {
     { id: rid(11), fields: { Name: 'Website Content Retainer', Stage: 'Active', Client: [rid(1)], Type: 'Client', 'Rounding Increment': 15, 'Included Hours': 60, 'Weekly Cap': 5, 'Monthly Cap': 20 } },
     { id: rid(12), fields: { Name: 'Brand Audit', Stage: 'Wrap-up', Client: [rid(1)], Type: 'Client' } },
     { id: rid(13), fields: { Name: 'Internal: Product development', Stage: 'Active', Client: [rid(2)], Type: 'Internal', 'Rounding Increment': 1 } },
+    { id: rid(14), fields: { Name: 'Internal: Sales and outreach', Stage: 'Active', Client: [rid(2)], Type: 'Internal', 'Rounding Increment': 1 } },
+    { id: rid(15), fields: { Name: 'Internal: Marketing', Stage: 'Active', Client: [rid(2)], Type: 'Internal', 'Rounding Increment': 1 } },
   ],
   [DEL]: [
     { id: rid(21), fields: { Name: 'Homepage copy', Engagement: [rid(11)], Status: 'In progress' } },
     { id: rid(22), fields: { Name: 'Product pages', Engagement: [rid(11)], Status: 'Not started' } },
+    // Standing deliverables on internal projects: reusable outputs you can count the time against
+    { id: rid(23), fields: { Name: 'Addendum or amendment', Engagement: [rid(14)] } },
+    { id: rid(24), fields: { Name: 'Proposal or SOW', Engagement: [rid(14)] } },
+    { id: rid(25), fields: { Name: 'LinkedIn post', Engagement: [rid(15)] } },
   ],
   [TASK]: [
     { id: rid(31), fields: { Name: 'Writing', 'Applies To': 'Client', Active: true, Sort: 20 } },
@@ -30,6 +36,11 @@ const db = {
     { id: rid(34), fields: { Name: 'Check-in call', Parent: [rid(33)], 'Applies To': 'Client', Active: true, Sort: 52 } },
     { id: rid(35), fields: { Name: 'Product', 'Applies To': 'Internal', Active: true, Sort: 100 } },
     { id: rid(36), fields: { Name: 'Tool build', Parent: [rid(35)], 'Applies To': 'Internal', Active: true, Sort: 101 } },
+    { id: rid(37), fields: { Name: 'Sales', 'Applies To': 'Both', Active: true, Sort: 80 } },
+    { id: rid(38), fields: { Name: 'Proposal', Parent: [rid(37)], 'Applies To': 'Both', Active: true, Sort: 82 } },
+    { id: rid(39), fields: { Name: 'Amendment or addendum', Parent: [rid(37)], 'Applies To': 'Both', Active: true, Sort: 84 } },
+    { id: rid(40), fields: { Name: 'Marketing', 'Applies To': 'Internal', Active: true, Sort: 90 } },
+    { id: rid(41), fields: { Name: 'LinkedIn', Parent: [rid(40)], 'Applies To': 'Internal', Active: true, Sort: 91 } },
   ],
   [TE]: [],
 };
@@ -94,6 +105,14 @@ http.createServer(async (req, res) => {
     }
     if (req.method === 'DELETE') { db[table] = db[table].filter((x) => x.id !== recId); recompute(); return send(res, 200, { id: recId, deleted: true }); }
     return send(res, 405, { error: 'Not allowed' });
+  }
+  // The demo turns the optional "For customer" picker on so you can try it. Your real config.js is not changed.
+  if (url.pathname === '/config.js') {
+    return fs.readFile(path.join(__dirname, 'public', 'config.js'), 'utf8', (err, txt) => {
+      if (err) { res.writeHead(404); return res.end('Not found'); }
+      res.writeHead(200, { 'content-type': 'text/javascript', 'cache-control': 'no-store' });
+      res.end(txt.replace("relatedClientField: ''", "relatedClientField: 'Related Client'"));
+    });
   }
   const p = url.pathname === '/' ? '/index.html' : url.pathname;
   const file = path.join(__dirname, 'public', path.normalize(p).replace(/^(\.\.[/\\])+/, ''));

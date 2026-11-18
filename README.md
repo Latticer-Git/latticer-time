@@ -15,6 +15,8 @@ Not sure it is for you? Read [who it is for](docs/who-its-for.md) and [why it wo
 
 Cost: Cloudflare Pages and Cloudflare Access have free tiers that cover one person. Airtable also has a free plan, but the original was built on a paid plan, so check that your plan supports the rollup and formula fields in the schema. Plan limits change; verify before you commit.
 
+<img src="docs/images/timer-paused.png" alt="The Latticer Time timer paused on an internal project, with a For customer picker and a Resume button" width="320">
+
 ## Try it in 30 seconds (no accounts)
 
 ```bash
