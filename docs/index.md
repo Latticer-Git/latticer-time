@@ -1,6 +1,6 @@
 ---
-title: Latticer Time documentation
-description: Start here. Find the right guide whether you want to try the timer, set it up, use it every day, or understand why it is built the way it is.
+title: "Latticer Time documentation"
+description: "Start here. Find the right guide whether you want to try the timer, set it up, use it every day, or understand why it is built the way it is."
 ---
 
 # Latticer Time documentation

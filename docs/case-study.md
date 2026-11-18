@@ -1,6 +1,6 @@
 ---
-title: Case study: a time tracker built around one sentence
-description: Why Latticer Time exists, the decisions that shaped it, and what went wrong along the way.
+title: "Case study: a time tracker built around one sentence"
+description: "Why Latticer Time exists, the decisions that shaped it, and what went wrong along the way."
 ---
 
 # Case study: a time tracker built around one sentence

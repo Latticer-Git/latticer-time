@@ -1,6 +1,6 @@
 ---
-title: Setup guide
-description: Build your own copy: the Airtable base, a scoped token, Cloudflare Pages, Cloudflare Access, your phone and a first test entry.
+title: "Setup guide"
+description: "Build your own copy: the Airtable base, a scoped token, Cloudflare Pages, Cloudflare Access, your phone and a first test entry."
 ---
 
 # Setup guide

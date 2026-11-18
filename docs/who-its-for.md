@@ -1,6 +1,6 @@
 ---
-title: Who Latticer Time is for
-description: The people this timer is built for, the problems it solves, and the people who should use something else.
+title: "Who Latticer Time is for"
+description: "The people this timer is built for, the problems it solves, and the people who should use something else."
 ---
 
 # Who Latticer Time is for

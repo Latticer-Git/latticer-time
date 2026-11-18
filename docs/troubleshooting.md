@@ -1,6 +1,6 @@
 ---
-title: Troubleshooting
-description: Symptoms, likely causes and fixes for setup, sign-in, Airtable errors, pause, and mismatched hours.
+title: "Troubleshooting"
+description: "Symptoms, likely causes and fixes for setup, sign-in, Airtable errors, pause, and mismatched hours."
 ---
 
 # Troubleshooting

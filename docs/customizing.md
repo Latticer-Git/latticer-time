@@ -1,6 +1,6 @@
 ---
-title: Customizing
-description: Change settings, rounding rules, branding, fields and statements.
+title: "Customizing"
+description: "Change settings, rounding rules, branding, fields and statements."
 ---
 
 # Customizing

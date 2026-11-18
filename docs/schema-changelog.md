@@ -1,6 +1,6 @@
 ---
-title: Schema changelog
-description: Every change to the Airtable tables, fields and formulas behind Latticer Time, newest first, with the steps to apply each one to an existing base.
+title: "Schema changelog"
+description: "Every change to the Airtable tables, fields and formulas behind Latticer Time, newest first, with the steps to apply each one to an existing base."
 ---
 
 # Schema changelog

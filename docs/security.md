@@ -1,6 +1,6 @@
 ---
-title: Security notes
-description: What protects your data, what the proxy function allows, and what to double-check.
+title: "Security notes"
+description: "What protects your data, what the proxy function allows, and what to double-check."
 ---
 
 # Security notes

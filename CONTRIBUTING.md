@@ -18,7 +18,7 @@ Documentation is part of the feature. A change is not done until these are done:
 4. **A design choice someone might question:** add the reason to [docs/why-it-works-this-way.md](docs/why-it-works-this-way.md), including the alternative you rejected.
 5. **New config setting:** add it to the table in [docs/customizing.md](docs/customizing.md) and to `public/config.js` with a comment.
 6. **New failure mode:** add a row to [docs/troubleshooting.md](docs/troubleshooting.md).
-7. Every docs page keeps its `title` and `description` front matter, uses sentence-case headings, and links to other pages with relative paths. No real client names, tokens or base IDs.
+7. Every docs page keeps its `title` and `description` front matter, with both values in double quotes (an unquoted colon followed by a space breaks the YAML and GitHub shows an error banner), uses sentence-case headings, and links to other pages with relative paths. No real client names, tokens or base IDs.
 
 The pull request template repeats this checklist.
 

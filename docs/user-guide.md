@@ -1,6 +1,6 @@
 ---
-title: User guide
-description: How to use the timer every day, including starting, pausing, stopping, adding time by hand, working offline, and logging internal work.
+title: "User guide"
+description: "How to use the timer every day, including starting, pausing, stopping, adding time by hand, working offline, and logging internal work."
 ---
 
 # User guide

@@ -1,6 +1,6 @@
 ---
-title: Changelog
-description: Feature releases of Latticer Time, newest first, with upgrade notes.
+title: "Changelog"
+description: "Feature releases of Latticer Time, newest first, with upgrade notes."
 ---
 
 # Changelog

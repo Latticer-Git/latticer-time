@@ -1,6 +1,6 @@
 ---
-title: Airtable schema
-description: Every table, field and formula the timer needs, with copy-paste formulas and a short reason for each part.
+title: "Airtable schema"
+description: "Every table, field and formula the timer needs, with copy-paste formulas and a short reason for each part."
 ---
 
 # Airtable schema

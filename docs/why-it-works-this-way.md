@@ -1,6 +1,6 @@
 ---
-title: Why it works this way
-description: The reasoning behind the Airtable schema and the app's features, including internal versus client work, rounding, caps, pause, and why clients get a statement instead of a login.
+title: "Why it works this way"
+description: "The reasoning behind the Airtable schema and the app's features, including internal versus client work, rounding, caps, pause, and why clients get a statement instead of a login."
 ---
 
 # Why it works this way
